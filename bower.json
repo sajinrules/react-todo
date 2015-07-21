@@ -1,0 +1,21 @@
+{
+  "name": "react-todo",
+  "version": "0.0.0",
+  "authors": [
+    "sajin <sajinrules@gmail.com>"
+  ],
+  "description": "react sample todo application",
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "materialize": "~0.97.0",
+    "react": "~0.13.3"
+  }
+}
