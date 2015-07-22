@@ -23,13 +23,16 @@ var TodoApp = React.createClass({
     var allItems = this.state.items.concat([newItem]);
     this.setState({items: allItems});
   },
+  removeUpdate : function(key){
+    console.log("key:",key)
+  },
   render: function(){
     return(
       <div>
         <TodoNavBar/>
         <div className="container">
           <TodoForm onFormSubmit={this.updateItems}/>
-          <TodoList items ={this.state.items}/>
+          <TodoList onRemoveItem={this.removeUpdate} items ={this.state.items}/>
         </div>
       </div>
     );
@@ -37,10 +40,14 @@ var TodoApp = React.createClass({
 });
 
 var TodoList = React.createClass({
+  removeTodo : function(param){
+    console.log("param",param);
+    this.props.onRemoveItem(param)
+  },
   render: function() {
-    var createItem = function(itemText) {
+    var createItem = function(itemText,i) {
       return (
-        <TodoListItem>{itemText}</TodoListItem>
+        <TodoListItem onRemove={this.removeTodo} index={i} key={i}>{itemText}</TodoListItem>
       );
     };
     
@@ -58,11 +65,16 @@ var TodoList = React.createClass({
 
 
 var TodoListItem = React.createClass({
+  remove : function(index){
+    console.log(index);
+    //this.props.onRemove(index);
+  },
   render : function(){
+    console.log(this.props);
     return(
       <li className="collection-item">
         <div>{this.props.children}
-          <a href="" className="secondary-content">
+          <a href="" onClick={this.remove(this.props.index)} className="secondary-content">
             <i className="material-icons">delete</i>
           </a>
         </div>
@@ -72,17 +84,34 @@ var TodoListItem = React.createClass({
 });
 
 var TodoForm = React.createClass({
+
+  getInitialState: function() {
+    return {item: ''};
+  },
+  onChange: function(e){
+    this.setState({
+      item: e.target.value
+    });
+  },
+  handleClick: function(e){
+    console.log(this.state.item);
+    e.preventDefault();
+    this.props.onFormSubmit(this.state.item);
+    this.setState({item: ''});
+    //React.findDOMNode(this.refs.item).focus();
+    return;
+  },
   render : function(){
     return(
       <div className="row">
         <div className="col s12">
           <div className="row">
             <div className="input-field col s10">
-              <input type="text" className="validate"/>
+              <input type="text" onChange={this.onChange} value={this.state.text} className="validate"/>
               <label for="name">Name</label>
             </div>
             <div className="input-field col s2">
-              <a className="waves-effect waves-light btn">Add</a>
+              <a className="waves-effect waves-light btn" onClick={this.handleClick}>Add</a>
             </div>
           </div>
         </div>
