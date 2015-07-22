@@ -1,4 +1,4 @@
-var NavBar = React.createClass({
+var TodoNavBar = React.createClass({
   render : function(){
     return(
       <nav>
@@ -15,18 +15,74 @@ var NavBar = React.createClass({
   }
 })
 
-var TodoAdd = React.createClass({
+var TodoApp = React.createClass({
+  getInitialState: function(){
+    return {items: []};
+  },
+  updateItems: function(newItem){
+    var allItems = this.state.items.concat([newItem]);
+    this.setState({items: allItems});
+  },
+  render: function(){
+    return(
+      <div>
+        <TodoNavBar/>
+        <div className="container">
+          <TodoForm onFormSubmit={this.updateItems}/>
+          <TodoList items ={this.state.items}/>
+        </div>
+      </div>
+    );
+  }  
+});
+
+var TodoList = React.createClass({
+  render: function() {
+    var createItem = function(itemText) {
+      return (
+        <TodoListItem>{itemText}</TodoListItem>
+      );
+    };
+    
+    return(
+      <ul id="staggered-test" className="collection with-header">
+        <li className="collection-header">
+          <h4>todo list</h4>
+          {this.props.items.map(createItem)}
+        </li>
+        
+      </ul>
+    )
+  }
+});
+
+
+var TodoListItem = React.createClass({
+  render : function(){
+    return(
+      <li className="collection-item">
+        <div>{this.props.children}
+          <a href="" className="secondary-content">
+            <i className="material-icons">delete</i>
+          </a>
+        </div>
+      </li>
+    )
+  }
+});
+
+var TodoForm = React.createClass({
   render : function(){
     return(
       <div className="row">
         <div className="col s12">
           <div className="row">
             <div className="input-field col s10">
-              <input type="text" value={this.props.text} />
-              <label for="name">name</label>
+              <input type="text" className="validate"/>
+              <label for="name">Name</label>
             </div>
             <div className="input-field col s2">
-              <a className="waves-effect waves-light btn" onClick={this.props.handleSubmit} >Add</a>
+              <a className="waves-effect waves-light btn">Add</a>
             </div>
           </div>
         </div>
@@ -35,37 +91,5 @@ var TodoAdd = React.createClass({
   }
 });
 
-var TodoList = React.createClass({
-  render: function() {
-    var createItem = function(itemText, index) {
-      return <li key={index + itemText}>{itemText}</li>;
-    };
-    return <ul>{this.props.items.map(createItem)}</ul>;
-  }
-});
-var TodoApp = React.createClass({
-  getInitialState: function() {
-    return {items: [], text: ''};
-  },
-  onChange: function(e) {
-    this.setState({text: e.target.value});
-  },
-  handleSubmit: function(e) {
-    console.log("e:",e);
-    console.log("this.state.text:",this.state.text);
-    e.preventDefault();
-    var nextItems = this.state.items.concat([this.state.text]);
-    var nextText = '';
-    this.setState({items: nextItems, text: nextText});
-  },
-  render: function() {
-    return (
-      <div>
-        <NavBar/>
-        <TodoList items={this.state.items} />
-        <TodoAdd text={this.state.text} onClick={this.state.handleSubmit}/>
-      </div>
-    );
-  }
-});
+
 React.render(<TodoApp/>,document.body);
