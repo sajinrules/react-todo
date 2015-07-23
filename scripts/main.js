@@ -29,7 +29,7 @@ var TodoApp = React.createClass({
         <TodoNavBar/>
         <div className="container">
           <TodoForm onFormSubmit={this.updateItems}/>
-          <TodoList items ={this.state.items}/>
+          <TodoList items={this.state.items}/>
         </div>
       </div>
     );
@@ -37,10 +37,13 @@ var TodoApp = React.createClass({
 });
 
 var TodoList = React.createClass({
+  remove : function(){
+    console.log('remove ivide');
+  },
   render: function() {
     var createItem = function(itemText,i) {
       return (
-        <TodoListItem index={i} key={i}>{itemText}</TodoListItem>
+        <TodoListItem onDelete={this.remove} index={i} key={i}>{itemText}</TodoListItem>
       );
     };
     
@@ -58,11 +61,15 @@ var TodoList = React.createClass({
 
 
 var TodoListItem = React.createClass({
+  remove : function(key){
+    console.log('test:',key);
+    this.props.onDelete();
+  },
   render : function(){
     return(
       <li className="collection-item">
         <div>{this.props.children}
-          <a href="#" className="secondary-content">
+          <a onClick={this.remove.bind(this,this.props.index)} href="#" className="secondary-content">
             <i className="material-icons">delete</i>
           </a>
         </div>
