@@ -38,7 +38,8 @@ var TodoApp = React.createClass({
 
 var TodoList = React.createClass({
   remove : function(){
-    console.log('remove ivide');
+    console.log('remove from here:',this.props.items);
+
   },
   render: function() {
     var createItem = function(itemText,i) {
@@ -51,7 +52,7 @@ var TodoList = React.createClass({
       <ul id="staggered-test" className="collection with-header">
         <li className="collection-header">
           <h4>todo list</h4>
-          {this.props.items.map(createItem)}
+          {this.props.items.map(createItem,this)}
         </li>
         
       </ul>
@@ -61,15 +62,11 @@ var TodoList = React.createClass({
 
 
 var TodoListItem = React.createClass({
-  remove : function(key){
-    console.log('test:',key);
-    this.props.onDelete();
-  },
   render : function(){
     return(
       <li className="collection-item">
         <div>{this.props.children}
-          <a onClick={this.remove.bind(this,this.props.index)} href="#" className="secondary-content">
+          <a onClick={this.props.onDelete} href="#" className="secondary-content">
             <i className="material-icons">delete</i>
           </a>
         </div>
