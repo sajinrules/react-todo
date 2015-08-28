@@ -37,14 +37,14 @@ var TodoApp = React.createClass({
 });
 
 var TodoList = React.createClass({
-  remove : function(){
-    console.log('remove from here:',this.props.items);
-
+  remove : function(index){
+    var allItems = this.props.items.splice(index,1);
+    this.setState({items:allItems});
   },
   render: function() {
     var createItem = function(itemText,i) {
       return (
-        <TodoListItem onDelete={this.remove} index={i} key={i}>{itemText}</TodoListItem>
+        <TodoListItem onDelete={this.remove.bind(this,i)} index={i} key={i}>{itemText}</TodoListItem>
       );
     };
     
